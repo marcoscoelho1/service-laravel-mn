@@ -30,5 +30,5 @@ Route::get('/state/{id}', [StateController::class, 'show']);
 Route::get('/city', [CityController::class, 'index']);
 Route::get('/city/{id}', [CityController::class, 'show']);
 
-Route::get('/address', [StateController::class, 'index']);
+Route::get('/address', [AddressController::class, 'index']);
 Route::get('/address/{id}', [AddressController::class, 'show']);
