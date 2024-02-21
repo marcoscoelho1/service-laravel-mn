@@ -9,7 +9,7 @@ class Address extends Model
 {
     protected $table = 'address';
     protected $primaryKey = 'id';
-    protected $fillable = ['street', 'number', 'zipCode', 'id_city'];
+    protected $fillable = ['street', 'number', 'zip_code', 'id_city'];
 
 
     public function user()

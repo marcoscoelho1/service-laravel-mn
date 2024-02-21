@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('street');
             $table->integer('number');
-            $table->integer('zipCode');
+            $table->integer('zip_code');
             $table->bigInteger('id_city')->unsigned();
             $table->foreign('id_city')->references('id')->on('city');
             $table->timestamps();

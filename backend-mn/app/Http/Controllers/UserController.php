@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Address;
+use App\Http\Requests\CreateUserRequest;
 
 class UserController extends Controller
 {
@@ -23,19 +24,21 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
+        $request->validated();
+
         $address = new Address();
         $address->street = $request->address['street'];
 
 
         $address->number = $request->address['number'];
-        $address->zipCode = $request->address['zipCode'];
+        $address->zip_code = $request->address['zip_code'];
         $address->id_city = $request->address['id_city'];
 
 
         if (!$address->save()) {
-            return response(['message' => 'Erro ao salvar endereço.'], 500);
+            return response(['message' => 'Error saving address.'], 500);
         }
 
         $user = new User();
@@ -45,7 +48,7 @@ class UserController extends Controller
         $user->id_address = $address->id;
 
         if (!$user->save()) {
-            return response(['message' => 'Erro ao salvar usuário.'], 500);
+            return response(['message' => 'Error saving user.'], 500);
         }
 
         return response()->json($user);
@@ -67,8 +70,10 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CreateUserRequest $request, string $id)
     {
+
+        $request->validated();
 
         $user = User::find($id);
         $user->name = $request->name;
@@ -76,7 +81,7 @@ class UserController extends Controller
         $user->password = $request->password;
 
         if (!$user->save()) {
-            return response(['message' => 'Erro ao editar usuário.'], 500);
+            return response(['message' => 'Error updating user.'], 500);
         }
 
         $address = $user->address;
@@ -84,11 +89,11 @@ class UserController extends Controller
             $address->update([
                 'street' => $request->address['street'],
                 'number' => $request->address['number'],
-                'zipCode' => $request->address['zipCode'],
+                'zip_code' => $request->address['zip_code'],
                 'id_city' => $request->address['id_city'],
             ]);
         } else {
-            return response(['message' => 'Endereço não encontrado.'], 404);
+            return response(['message' => 'Address not found.'], 404);
         }
 
         return $user;
@@ -106,9 +111,9 @@ class UserController extends Controller
         }
 
         if (!$user::destroy($id)) {
-            return response(['message' => 'Error to delete data.'], 500);
+            return response(['message' => 'Error deleting data.'], 500);
         }
 
-        return response(['message' => 'User removed.'], 201);
+        return response(['message' => 'User deleted.'], 201);
     }
 }
